@@ -1,0 +1,20 @@
+{
+  "name": "@joshuasharris/mongos_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  	"init": "mkdir pids && mkdir data && mkdir logs",
+  	"start": "npm stop && (npm run config-start & npm run config2-start & npm run shard-start & npm run shard2-start & npm run shard3-start)",
+  	"stop": "npm run kill",
+  	"kill": "for i in $(ls pids/); do if kill -9 $(cat pids/$i); then rm pids/$i; fi; done",
+  	"config-start": "mongod --configsvr --port 9100 --dbpath data/config1 --logpath logs/config1 --pidfilepath $(pwd)/pids/config1 --replSet config --fork",
+  	"config2-start": "mongod --configsvr --port 9101 --dbpath data/config2 --logpath logs/config2 --pidfilepath $(pwd)/pids/config2 --replSet config --fork",
+  	"shard-start": "mongod --shardsvr --port 9200 --dbpath data/shard1 --logpath logs/shard1 --pidfilepath $(pwd)/pids/shard1 --fork",
+  	"shard2-start": "mongod --shardsvr --port 9201 --dbpath data/shard2 --logpath logs/shard2 --pidfilepath $(pwd)/pids/shard2 --fork",
+  	"shard3-start": "mongod --shardsvr --port 9202 --dbpath data/shard3 --logpath logs/shard3 --pidfilepath $(pwd)/pids/shard3 --fork",
+  	"mongos-start": "mongos --configdb 'config/127.0.0.1:9100,127.0.0.1:9101' --port 9000"
+  },
+  "author": "",
+  "license": "ISC"
+}
